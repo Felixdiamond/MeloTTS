@@ -1,6 +1,21 @@
 import pickle
 import os
 import re
+import nltk
+
+# Ensure NLTK resources are available for both older (averaged_perceptron_tagger)
+# and newer (averaged_perceptron_tagger_eng) NLTK versions required by g2p_en.
+_NLTK_RESOURCES = {
+    'taggers/averaged_perceptron_tagger': 'averaged_perceptron_tagger',
+    'taggers/averaged_perceptron_tagger_eng': 'averaged_perceptron_tagger_eng',
+    'corpora/cmudict': 'cmudict',
+}
+for _resource_path, _resource_id in _NLTK_RESOURCES.items():
+    try:
+        nltk.data.find(_resource_path)
+    except LookupError:
+        nltk.download(_resource_id, quiet=True)
+
 from g2p_en import G2p
 
 from . import symbols
